@@ -1,4 +1,5 @@
-# Enumify
+# Enumify [![Build Status](https://secure.travis-ci.org/yonbergman/enumify.png)](http://travis-ci.org/yonbergman/enumify)
+
 
 enumify adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums
 

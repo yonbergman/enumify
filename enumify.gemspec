@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["yon"]
   s.email       = ["yonatanbergman@gmail.com"]
   s.homepage    = "http://github.com/yonbergman/enumify"
-  s.summary     = %q{Enumify adds an enum command for ActiveRecord that changes a string column/attribute to an enum}
-  s.description = %q{enumify rocks}
+  s.summary     = %q{enumify adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums}
+  s.description = %q{enumify adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums}
 
   s.rubyforge_project = "enumify"
 
@@ -20,6 +20,5 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
-  s.add_runtime_dependency "supermodel"
-  # s.add_runtime_dependency "rest-client"
+  s.add_development_dependency "supermodel"
 end

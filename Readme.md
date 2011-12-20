@@ -1,6 +1,6 @@
 # Enumify
 
-This gem adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums
+enumify adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums
 
 ## Installing
 

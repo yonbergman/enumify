@@ -1,0 +1,2 @@
+require 'enumify'
+require 'supermodel'

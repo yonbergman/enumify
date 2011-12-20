@@ -47,6 +47,14 @@ All you need to do is add a x_changed method in your class and the enumify will 
     end
 
 
+## Scopes
+One last thing that the enumify gem does is created scope (formerly nested_scopes) so you can easly query by the enum
+
+For example if you want to count all the events that are canceled you can just run
+
+    Event.canceled.count
+
+
 ---
 
 Copyright (c) 2011 Yonatan Bergman, released under the MIT license

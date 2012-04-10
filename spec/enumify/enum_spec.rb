@@ -1,19 +1,35 @@
 require 'spec_helper'
 
-class Model < SuperModel::Base
-  include ActiveModel::Validations
+class Model < ActiveRecord::Base
   extend Enumify::Model
-  def self.scope(name,hash={}) self end
-  def self.where(hash={}) self end
 
   enum :status, [:available, :canceled, :completed]
-  
+end
+
+class OtherModel < ActiveRecord::Base
+  extend Enumify::Model
+
+  belongs_to :model
+
+  enum :status, [:active, :expired]
 end
 
 describe :Enumify do
 
   before(:each) do
-    @obj = Model.new(:status => :available)
+    Model.delete_all
+
+    @obj = Model.create!(:status => :available)
+    @canceled_obj = Model.create!(:status => :canceled)
+    @completed_obj = Model.create!(:status => :completed)
+
+    @active_obj = OtherModel.create!(:status => :active)
+    @active_obj.model = @obj
+    @active_obj.save!
+
+    @expired_obj = OtherModel.create!(:status => :expired)
+    @expired_obj.model = @canceled_obj
+    @expired_obj.save!
   end
 
   describe "short hand methods" do
@@ -93,6 +109,26 @@ describe :Enumify do
     it "should not receive a callback on value change to same" do
       @obj.should_not_receive(:status_changed).with(:available, :available)
       @obj.available!
+    end
+
+  end
+
+  describe "scopes" do
+    it "should return objects with given status" do
+      Model.available.should == [@obj]
+      Model.canceled.should == [@canceled_obj]
+    end
+
+    it "should return objects with given status when joined with models who have the same enum field" do
+      OtherModel.joins(:model).active.should == [@active_obj]
+    end
+
+    it "should return objects that do not have given status" do
+      Model.not_available.should include(@canceled_obj, @completed_obj)
+    end
+
+    it "should return objects that do not have given status when joined with models who have the same enum field" do
+      OtherModel.joins(:model).not_active.should == [@expired_obj]
     end
 
   end

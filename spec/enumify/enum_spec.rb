@@ -18,18 +18,14 @@ describe :Enumify do
 
   before(:each) do
     Model.delete_all
+    OtherModel.delete_all
 
     @obj = Model.create!(:status => :available)
     @canceled_obj = Model.create!(:status => :canceled)
     @completed_obj = Model.create!(:status => :completed)
 
-    @active_obj = OtherModel.create!(:status => :active)
-    @active_obj.model = @obj
-    @active_obj.save!
-
-    @expired_obj = OtherModel.create!(:status => :expired)
-    @expired_obj.model = @canceled_obj
-    @expired_obj.save!
+    @active_obj = OtherModel.create!(:status => :active, :model => @obj)
+    @expired_obj = OtherModel.create!(:status => :expired, :model => @canceled_obj)
   end
 
   describe "short hand methods" do
@@ -114,24 +110,28 @@ describe :Enumify do
   end
 
   describe "scopes" do
-    it "should return objects with given status" do
+    it "should return objects with given value" do
       Model.available.should == [@obj]
       Model.canceled.should == [@canceled_obj]
     end
 
-    it "should return objects with given status when joined with models who have the same enum field" do
+    it "should return objects with given value when joined with models who have the same enum field" do
       OtherModel.joins(:model).active.should == [@active_obj]
     end
 
-    it "should return objects that do not have given status" do
-      Model.not_available.should include(@canceled_obj, @completed_obj)
-    end
+    describe "not scopes" do
 
-    it "should return objects that do not have given status when joined with models who have the same enum field" do
-      OtherModel.joins(:model).not_active.should == [@expired_obj]
+      it "should return objects that do not have the given value" do
+        Model.not_available.should include(@canceled_obj, @completed_obj)
+      end
+
+      it "should return objects that do not have the given value when joined with models who have the same enum field" do
+        OtherModel.joins(:model).not_active.should == [@expired_obj]
+      end
     end
 
   end
+
 
   it "class should have a CONST that holds all the available options of the enum" do
     Model::STATUSES.should == [:available, :canceled, :completed]

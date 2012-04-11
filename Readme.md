@@ -54,6 +54,10 @@ For example if you want to count all the events that are canceled you can just r
 
     Event.canceled.count
 
+In addition you can also use a negation scope to retrieve all the records that are not set to the given value.
+For example to count all the events that are not canceled you can run
+
+    Event.not_canceled.count
 
 ---
 

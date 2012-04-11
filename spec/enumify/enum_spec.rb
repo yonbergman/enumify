@@ -119,7 +119,7 @@ describe :Enumify do
       OtherModel.joins(:model).active.should == [@active_obj]
     end
 
-    describe "not scopes" do
+    describe "negation scopes" do
 
       it "should return objects that do not have the given value" do
         Model.not_available.should include(@canceled_obj, @completed_obj)

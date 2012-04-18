@@ -1,19 +1,31 @@
 require 'spec_helper'
 
-class Model < SuperModel::Base
-  include ActiveModel::Validations
+class Model < ActiveRecord::Base
   extend Enumify::Model
-  def self.scope(name,hash={}) self end
-  def self.where(hash={}) self end
 
   enum :status, [:available, :canceled, :completed]
-  
+end
+
+class OtherModel < ActiveRecord::Base
+  extend Enumify::Model
+
+  belongs_to :model
+
+  enum :status, [:active, :expired]
 end
 
 describe :Enumify do
 
   before(:each) do
-    @obj = Model.new(:status => :available)
+    Model.delete_all
+    OtherModel.delete_all
+
+    @obj = Model.create!(:status => :available)
+    @canceled_obj = Model.create!(:status => :canceled)
+    @completed_obj = Model.create!(:status => :completed)
+
+    @active_obj = OtherModel.create!(:status => :active, :model => @obj)
+    @expired_obj = OtherModel.create!(:status => :expired, :model => @canceled_obj)
   end
 
   describe "short hand methods" do
@@ -96,6 +108,30 @@ describe :Enumify do
     end
 
   end
+
+  describe "scopes" do
+    it "should return objects with given value" do
+      Model.available.should == [@obj]
+      Model.canceled.should == [@canceled_obj]
+    end
+
+    it "should return objects with given value when joined with models who have the same enum field" do
+      OtherModel.joins(:model).active.should == [@active_obj]
+    end
+
+    describe "negation scopes" do
+
+      it "should return objects that do not have the given value" do
+        Model.not_available.should include(@canceled_obj, @completed_obj)
+      end
+
+      it "should return objects that do not have the given value when joined with models who have the same enum field" do
+        OtherModel.joins(:model).not_active.should == [@expired_obj]
+      end
+    end
+
+  end
+
 
   it "class should have a CONST that holds all the available options of the enum" do
     Model::STATUSES.should == [:available, :canceled, :completed]

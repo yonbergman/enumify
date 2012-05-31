@@ -18,6 +18,7 @@ module Enumify
       self.class_eval do
 
         private
+
         define_method "_set_#{parameter.to_s}" do |value, should_save|
 
           value = value.to_sym
@@ -27,6 +28,7 @@ module Enumify
           send("#{parameter.to_s}_changed", old, value) if respond_to?("#{parameter.to_s}_changed", true) and old != value and !old.nil?
           return value
         end
+
       end
 
       opts.each do |opt|
@@ -40,15 +42,22 @@ module Enumify
             send("_set_#{parameter.to_s}", opt, true)
         end
 
-
         scope opt.to_sym, where(parameter.to_sym => opt.to_s)
+      end
+
+      # We want to first define all the "positive" scopes and only then define
+      # the "negation scopes", to make sure they don't override previous scopes
+      opts.each do |opt|
         # We need to prefix the field with the table name since if this scope will
         # be used in a joined query with other models that have the same enum field then
         # it will fail on ambiguous column name.
-        scope "not_#{opt}".to_sym, where("#{self.table_name}.#{parameter} != ?", opt.to_s)
+        unless respond_to?("not_#{opt}")
+          scope "not_#{opt}", where("#{self.table_name}.#{parameter} != ?", opt.to_s)
+        end
       end
 
     end
 
   end
+
 end

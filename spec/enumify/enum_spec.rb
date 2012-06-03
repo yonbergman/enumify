@@ -11,7 +11,7 @@ class OtherModel < ActiveRecord::Base
 
   belongs_to :model
 
-  enum :status, [:active, :expired]
+  enum :status, [:active, :expired, :not_expired]
 end
 
 describe :Enumify do
@@ -26,6 +26,7 @@ describe :Enumify do
 
     @active_obj = OtherModel.create!(:status => :active, :model => @obj)
     @expired_obj = OtherModel.create!(:status => :expired, :model => @canceled_obj)
+    @not_expired_obj = OtherModel.create!(:status => :not_expired, :model => @canceled_obj)
   end
 
   describe "short hand methods" do
@@ -126,8 +127,16 @@ describe :Enumify do
       end
 
       it "should return objects that do not have the given value when joined with models who have the same enum field" do
-        OtherModel.joins(:model).not_active.should == [@expired_obj]
+        OtherModel.joins(:model).not_active.should include(@expired_obj, @not_expired_obj)
       end
+
+      it "should not override positive scopes" do
+        # We want here to verify that the not_expired scope return only the models with
+        # status == "not_expired" and not all the models with status != "expired",
+        # since negation scopes should not override the "positive" scopes.
+        OtherModel.not_expired.should == [@not_expired_obj]
+      end
+
     end
 
   end

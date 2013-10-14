@@ -1,3 +1,6 @@
+## v0.0.5
+* Added 'allow_nil' as an option.
+
 ## v0.0.3
 * Fixed bug in not_ scopes
 

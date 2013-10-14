@@ -39,6 +39,20 @@ event.canceled!             # changes the enum's value to canceled
 Event::STATUSES             # returns all available status of the enum
 ```
 
+## Options
+#### :allow_nil
+By default the enum field does not support a nil value. In order to allow nil values add the `allow_nil` option (similar to the Rails validation option).
+
+```ruby
+class Event < ActiveRecord::Base
+    enum :status, [:available, :canceled, :completed], :allow_nil => true
+end
+
+Event.create! # Is valid and does not throw an exception.
+```
+
+
+
 ## Callbacks
 Another cool feature of enumify is the option to add a callback function that will be called each time the value of the field changes
 This is cool to do stuff like log stuff or create behaviour on state changes

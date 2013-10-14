@@ -14,6 +14,17 @@ class OtherModel < ActiveRecord::Base
   enum :status, [:active, :expired, :not_expired]
 end
 
+class ModelAllowingNil < ActiveRecord::Base
+  self.table_name = 'models'
+
+  extend Enumify::Model
+
+  belongs_to :model
+
+  enum :status, [:active, :expired, :not_expired], :allow_nil => true
+end
+
+
 describe :Enumify do
 
   before(:each) do
@@ -27,6 +38,28 @@ describe :Enumify do
     @active_obj = OtherModel.create!(:status => :active, :model => @obj)
     @expired_obj = OtherModel.create!(:status => :expired, :model => @canceled_obj)
     @not_expired_obj = OtherModel.create!(:status => :not_expired, :model => @canceled_obj)
+  end
+
+  describe "allow nil" do
+
+    before(:each) do
+      @obj_not_allowing_nil = Model.create
+      @obj_allowing_nil = ModelAllowingNil.create
+    end
+
+    describe "model allowing enum value to be nil" do
+      it "should be valid" do
+        @obj_allowing_nil.should be_valid
+      end
+
+    end
+
+    describe "model not allowing enum value to be nil" do
+      it "should be invalid" do
+        @obj_not_allowing_nil.should be_invalid
+      end
+    end
+
   end
 
   describe "short hand methods" do

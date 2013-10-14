@@ -1,8 +1,8 @@
 module Enumify
   module Model
-    def enum(parameter, vals=[], opts={:allow_nil => false})
+    def enum(parameter, vals=[], opts={})
 
-      validates_inclusion_of parameter, :in => vals, :allow_nil => opts[:allow_nil]
+      validates_inclusion_of parameter, :in => vals, :allow_nil => !!opts[:allow_nil]
 
       const_set("#{parameter.to_s.pluralize.upcase}", vals)
 

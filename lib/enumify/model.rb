@@ -1,10 +1,10 @@
 module Enumify
   module Model
-    def enum(parameter, opts=[])
+    def enum(parameter, vals=[], opts={})
 
-      validates_inclusion_of parameter, :in => opts
+      validates_inclusion_of parameter, :in => vals, :allow_nil => !!opts[:allow_nil]
 
-      const_set("#{parameter.to_s.pluralize.upcase}", opts)
+      const_set("#{parameter.to_s.pluralize.upcase}", vals)
 
       define_method "#{parameter.to_s}" do
         attr = read_attribute(parameter)
@@ -31,28 +31,28 @@ module Enumify
 
       end
 
-      opts.each do |opt|
-        raise "Collision in enum values method #{opt}" if respond_to?("#{opt.to_s}?") or respond_to?("#{opt.to_s}!") or respond_to?("#{opt.to_s}")
+      vals.each do |val|
+        raise "Collision in enum values method #{val}" if respond_to?("#{val.to_s}?") or respond_to?("#{val.to_s}!") or respond_to?("#{val.to_s}")
 
-        define_method "#{opt.to_s}?" do
-            send("#{parameter.to_s}") == opt
+        define_method "#{val.to_s}?" do
+            send("#{parameter.to_s}") == val
         end
 
-        define_method "#{opt.to_s}!" do
-            send("_set_#{parameter.to_s}", opt, true)
+        define_method "#{val.to_s}!" do
+            send("_set_#{parameter.to_s}", val, true)
         end
 
-        scope opt.to_sym, lambda { where(parameter.to_sym => opt.to_s) }
+        scope val.to_sym, lambda { where(parameter.to_sym => val.to_s) }
       end
 
       # We want to first define all the "positive" scopes and only then define
       # the "negation scopes", to make sure they don't override previous scopes
-      opts.each do |opt|
+      vals.each do |val|
         # We need to prefix the field with the table name since if this scope will
         # be used in a joined query with other models that have the same enum field then
         # it will fail on ambiguous column name.
-        unless respond_to?("not_#{opt}")
-          scope "not_#{opt}", lambda { where("#{self.table_name}.#{parameter} != ?", opt.to_s) }
+        unless respond_to?("not_#{val}")
+          scope "not_#{val}", lambda { where("#{self.table_name}.#{parameter} != ?", val.to_s) }
         end
       end
 

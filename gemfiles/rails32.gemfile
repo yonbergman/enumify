@@ -4,4 +4,9 @@ source "http://rubygems.org"
 
 gem "activerecord", "~> 3.2.14"
 
+gem 'rubysl', '~> 2.0', :platforms => :rbx
+gem 'rubinius-developer_tools', :platforms => :rbx
+gem 'sqlite3', :platforms => [:ruby, :rbx]
+gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
+
 gemspec :path=>"../"

@@ -23,9 +23,10 @@ module Enumify
 
           value = value.to_sym
           old = read_attribute(parameter) ? read_attribute(parameter).to_sym : nil
+          return value if old == value
           write_attribute(parameter, value.to_s)
           save if should_save
-          send("#{parameter.to_s}_changed", old, value) if respond_to?("#{parameter.to_s}_changed", true) and old != value and !old.nil?
+          send("#{parameter.to_s}_changed", old, value) if respond_to?("#{parameter.to_s}_changed", true) and !old.nil?
           return value
         end
 

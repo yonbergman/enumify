@@ -1,3 +1,6 @@
+## v0.0.6
+* Calling method! will not trigger a save if the value had not changed
+
 ## v0.0.5
 * Added 'allow_nil' as an option.
 

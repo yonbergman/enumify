@@ -79,6 +79,15 @@ describe :Enumify do
         @obj.canceled!
         @obj.status.should == :canceled
       end
+
+      context 'trying to set the value to the same value' do
+        before { @obj.available! }
+        it 'should not save the object again' do
+          @obj.should_not_receive(:save)
+          @obj.available!
+        end
+      end
+
     end
 
     it "should have two shorthand methods for each possible value" do

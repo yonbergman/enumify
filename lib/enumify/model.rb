@@ -21,10 +21,10 @@ module Enumify
 
         define_method "_set_#{parameter.to_s}" do |value, should_save|
 
-          value = value.to_sym
+          value = value and value.to_sym
           old = read_attribute(parameter) ? read_attribute(parameter).to_sym : nil
           return value if old == value
-          write_attribute(parameter, value.to_s)
+          write_attribute(parameter, (value and value.to_s))
           save if should_save
           send("#{parameter.to_s}_changed", old, value) if respond_to?("#{parameter.to_s}_changed", true) and !old.nil?
           return value
@@ -36,11 +36,11 @@ module Enumify
         raise "Collision in enum values method #{val}" if respond_to?("#{val.to_s}?") or respond_to?("#{val.to_s}!") or respond_to?("#{val.to_s}")
 
         define_method "#{val.to_s}?" do
-            send("#{parameter.to_s}") == val
+          send("#{parameter.to_s}") == val
         end
 
         define_method "#{val.to_s}!" do
-            send("_set_#{parameter.to_s}", val, true)
+          send("_set_#{parameter.to_s}", val, true)
         end
 
         scope val.to_sym, lambda { where(parameter.to_sym => val.to_s) }

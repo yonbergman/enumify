@@ -48,15 +48,31 @@ describe :Enumify do
     end
 
     describe "model allowing enum value to be nil" do
+      subject { @obj_allowing_nil }
       it "should be valid" do
-        @obj_allowing_nil.should be_valid
+        subject.should be_valid
       end
 
+      it 'should not raise error when setting value to nil' do
+        expect {
+          subject.status = nil
+        }.to_not raise_error
+
+        subject.status.should be_nil
+      end
     end
 
     describe "model not allowing enum value to be nil" do
+      subject { @obj_not_allowing_nil }
       it "should be invalid" do
-        @obj_not_allowing_nil.should be_invalid
+        subject.should be_invalid
+      end
+
+      it 'should not raise error when setting value to nil' do
+        expect {
+          subject.status = nil
+        }.to_not raise_error
+        subject.should be_invalid
       end
     end
 

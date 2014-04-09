@@ -1,3 +1,6 @@
+## v0.0.7
+* Fixed an issue with setting an enum as a nil value
+
 ## v0.0.6
 * Calling method! will not trigger a save if the value had not changed
 

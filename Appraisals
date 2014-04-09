@@ -40,5 +40,5 @@ appraise "rails41" do
   gem 'sqlite3', '1.3.8' , :platforms => [:ruby, :rbx]
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 
-  gem "activerecord", "~> 4.1.0.beta1"
+  gem "activerecord", "~> 4.1.0"
 end

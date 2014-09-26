@@ -114,9 +114,9 @@ describe :Enumify do
     it "should always return the enums value as a symbol" do
       expect {
         @obj.status = "canceled"
-      }.to change{@obj.status}
-           .from(:available)
-           .to(:canceled)
+      }.to change{
+        @obj.status
+      }.from(:available).to(:canceled)
     end
 
   end

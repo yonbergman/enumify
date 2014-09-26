@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 class Model < ActiveRecord::Base
-  extend Enumify::Model
+  include Enumify::Model
 
   enum :status, [:available, :canceled, :completed]
 end
 
 class OtherModel < ActiveRecord::Base
-  extend Enumify::Model
+  include Enumify::Model
 
   belongs_to :model
 
@@ -15,10 +15,8 @@ class OtherModel < ActiveRecord::Base
 end
 
 class ModelAllowingNil < ActiveRecord::Base
+  include Enumify::Model
   self.table_name = 'models'
-
-  extend Enumify::Model
-
   enum :status, [:available, :canceled, :completed], :allow_nil => true
 end
 
@@ -209,8 +207,8 @@ describe :Enumify do
     context 'when prefix set to string' do
 
       class ModelWithPrefix < ActiveRecord::Base
+        include Enumify::Model
         self.table_name = 'models'
-        extend Enumify::Model
         enum :status, [:available, :canceled, :completed], :prefix => 'foo'
       end
 
@@ -243,8 +241,8 @@ describe :Enumify do
     context 'when prefix set to true' do
 
       class ModelWithPrefixTrue < ActiveRecord::Base
+        include Enumify::Model
         self.table_name = 'models'
-        extend Enumify::Model
         enum :status, [:available, :canceled, :completed], :prefix => true
       end
 

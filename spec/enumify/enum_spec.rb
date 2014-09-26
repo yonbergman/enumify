@@ -19,9 +19,7 @@ class ModelAllowingNil < ActiveRecord::Base
 
   extend Enumify::Model
 
-  belongs_to :model
-
-  enum :status, [:active, :expired, :not_expired], :allow_nil => true
+  enum :status, [:available, :canceled, :completed], :allow_nil => true
 end
 
 
@@ -201,9 +199,81 @@ describe :Enumify do
 
   end
 
-
   it "class should have a CONST that holds all the available options of the enum" do
     expect(Model::STATUSES).to eq [:available, :canceled, :completed]
+  end
+
+  describe 'prefix' do
+
+
+    context 'when prefix set to string' do
+
+      class ModelWithPrefix < ActiveRecord::Base
+        self.table_name = 'models'
+        extend Enumify::Model
+        enum :status, [:available, :canceled, :completed], :prefix => 'foo'
+      end
+
+      subject { ModelWithPrefix.new(:status => :available) }
+      it 'does not allow access through unprefixed enum' do
+        expect(subject).to_not respond_to(:available?)
+      end
+
+      it 'allows access to the attributes when prefixed by that string' do
+        expect(subject).to respond_to(:foo_available?)
+      end
+
+      it 'has a scope available with the prefix' do
+        expect(ModelWithPrefix).to respond_to(:foo_available)
+      end
+
+      it 'has no scope for unprefixed methods' do
+        expect(ModelWithPrefix).to_not respond_to(:available)
+      end
+
+      it 'has a negative scope available with the prefix' do
+        expect(ModelWithPrefix).to respond_to(:not_foo_available)
+      end
+
+      it 'has no negative scope for unprefixed methods' do
+        expect(ModelWithPrefix).to_not respond_to(:not_available)
+      end
+    end
+
+    context 'when prefix set to true' do
+
+      class ModelWithPrefixTrue < ActiveRecord::Base
+        self.table_name = 'models'
+        extend Enumify::Model
+        enum :status, [:available, :canceled, :completed], :prefix => true
+      end
+
+      subject { ModelWithPrefixTrue.new(:status => :available) }
+      it 'does not allow access through unprefixed enum' do
+        expect(subject).to_not respond_to(:available?)
+      end
+
+      it 'allows access to the attributes when prefixed by that string' do
+        expect(subject).to respond_to(:status_available?)
+      end
+
+      it 'has a scope available with the prefix' do
+        expect(ModelWithPrefixTrue).to respond_to(:status_available)
+      end
+
+      it 'has no scope for unprefixed methods' do
+        expect(ModelWithPrefixTrue).to_not respond_to(:available)
+      end
+
+      it 'has a negative scope available with the prefix' do
+        expect(ModelWithPrefixTrue).to respond_to(:not_status_available)
+      end
+
+      it 'has no negative scope for unprefixed methods' do
+        expect(ModelWithPrefixTrue).to_not respond_to(:not_available)
+      end
+    end
+
   end
 
 end

@@ -51,6 +51,20 @@ end
 Event.create! # Is valid and does not throw an exception.
 ```
 
+#### :prefix
+By default all enum values are available as scopes, bang and query methods based on the value. 
+You can add a prefix for the enum values in order to differentiate different enums on the same object. 
+
+```ruby
+class Event < ActiveRecord::Base
+    enum :status, [:available, :canceled, :completed], :prefix => true
+    enum :subtype, [:company, :personal], :prefix => 'type'
+end
+
+event.available?            # Not available anymore
+event.status_available?     # when prefix true
+event.type_company?         # you can set a specific name for your prefix
+```
 
 
 ## Callbacks

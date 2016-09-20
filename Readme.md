@@ -92,7 +92,7 @@ end
 
 event::STATUSES             # returns [:available, :canceled, :completed]
 event::WITHOUT_CONST        # raises NameError
-event::SPECIAL_NAME         # returns [:a, :b, :c]
+event::SPECIAL_NAME         # returns [:a, :b, :c]. Note the name was not pluralized.
 event::CUSTOM_NAME          # raises NameError
 ```
 

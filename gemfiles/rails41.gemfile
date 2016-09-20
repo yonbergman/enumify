@@ -9,7 +9,7 @@ gem "activerecord-jdbcsqlite3-adapter", :platforms => :jruby
 gem "activerecord", "~> 4.1.0"
 
 group :development do
-  gem "guard"
+  gem "guard", "2.12.6"
   gem "guard-rspec"
   gem "terminal-notifier-guard"
 end

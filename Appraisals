@@ -50,6 +50,10 @@ appraise "rails40" do
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 
   gem "activerecord", "~> 4.0.0"
+
+  group :development do
+    gem 'guard', '2.12.6'
+  end
 end
 
 appraise "rails41" do
@@ -59,4 +63,8 @@ appraise "rails41" do
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 
   gem "activerecord", "~> 4.1.0"
+
+  group :development do
+    gem 'guard', '2.12.6'
+  end
 end

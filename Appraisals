@@ -14,9 +14,11 @@ appraise "rails30" do
 end
 
 appraise "rails31" do
+  gem 'rake', '~> 10.5'
   gem 'rubysl', '~> 2.0', :platforms => :rbx
   gem 'rubinius-developer_tools', :platforms => :rbx
   gem 'sqlite3', '1.3.11' , :platforms => [:ruby, :rbx]
+  gem 'i18n', '~> 0.6.0'
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 
   gem "activerecord", "~> 3.1.12"
@@ -27,9 +29,11 @@ appraise "rails31" do
 end
 
 appraise "rails32" do
+  gem 'rake', '~> 10.5'
   gem 'rubysl', '~> 2.0', :platforms => :rbx
   gem 'rubinius-developer_tools', :platforms => :rbx
   gem 'sqlite3', '1.3.11' , :platforms => [:ruby, :rbx]
+  gem 'i18n', '~> 0.6.0'
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 
   gem "activerecord", "~> 3.2.14"

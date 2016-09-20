@@ -22,7 +22,7 @@ module Enumify
         if constant
           const_name = constant === true ? paramater_string.pluralize : constant.to_s
 
-          const_set("#{const_name.upcase}", vals)
+          const_set(const_name.upcase, vals)
         end
 
         define_method "#{paramater_string}" do

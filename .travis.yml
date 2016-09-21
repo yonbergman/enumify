@@ -12,6 +12,8 @@ gemfile:
   - gemfiles/rails32.gemfile
   - gemfiles/rails40.gemfile
   - gemfiles/rails41.gemfile
+before_install:
+  - "if [ ${TRAVIS_RUBY_VERSION:-''} = '1.9.3'  ]; then gem install bundler; fi"
 matrix:
   exclude:
     - rvm: 1.8.7

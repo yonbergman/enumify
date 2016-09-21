@@ -197,8 +197,54 @@ describe :Enumify do
 
   end
 
-  it "class should have a CONST that holds all the available options of the enum" do
-    expect(Model::STATUSES).to eq [:available, :canceled, :completed]
+  describe 'constant' do
+    class ModelWithoutConst < ActiveRecord::Base
+      include Enumify::Model
+      self.table_name = 'models'
+      enum :status, [:available, :canceled, :completed], :constant => false
+    end
+
+    class ModelWithSymbolNamedConst < ActiveRecord::Base
+      include Enumify::Model
+      self.table_name = 'models'
+      enum :status, [:available, :canceled, :completed], :constant => :special_status
+    end
+
+    class ModelWithStringNamedConst < ActiveRecord::Base
+      include Enumify::Model
+      self.table_name = 'models'
+      enum :status, [:available, :canceled, :completed], :constant => 'special_status'
+    end
+
+    it 'class should have a CONST that holds all the available options of the enum by default' do
+      expect(Model::STATUSES).to eq [:available, :canceled, :completed]
+    end
+
+    it 'should allow disabling CONST creation' do
+      expect { ModelWithoutConst::STATUSES }.to raise_error(NameError)
+    end
+
+    it 'should allow custom naming of CONST' do
+      expect { ModelWithSymbolNamedConst::SPECIAL_STATUS }.to_not raise_error
+      expect { ModelWithStringNamedConst::SPECIAL_STATUS }.to_not raise_error
+
+      expect(ModelWithSymbolNamedConst::SPECIAL_STATUS).to eq [:available, :canceled, :completed]
+      expect(ModelWithStringNamedConst::SPECIAL_STATUS).to eq [:available, :canceled, :completed]
+    end
+
+    it 'should fail to create CONST with invalid name' do
+      invalid_names = %w([] {} _ 1 . ; test; te^st $test)
+
+      invalid_names.each do |invalid_name|
+        expect {
+          Class.new(ActiveRecord::Base) {
+            include Enumify::Model
+            self.table_name = 'models'
+            enum :status, [:available, :canceled, :completed], :constant => invalid_name
+          }
+        }.to raise_error(NameError)
+      end
+    end
   end
 
   describe 'prefix' do

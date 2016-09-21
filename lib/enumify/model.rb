@@ -18,7 +18,12 @@ module Enumify
           prefix = "#{opts[:prefix].to_s}_"
         end
 
-        const_set("#{paramater_string.pluralize.upcase}", vals)
+        constant = opts.fetch(:constant, true)
+        if constant
+          const_name = constant === true ? paramater_string.pluralize : constant.to_s
+
+          const_set(const_name.upcase, vals)
+        end
 
         define_method "#{paramater_string}" do
           attr = read_attribute(parameter)

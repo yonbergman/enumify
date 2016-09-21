@@ -79,6 +79,22 @@ event.status_available?     # when prefix true
 event.type_company?         # you can set a specific name for your prefix
 ```
 
+#### :constant
+By default, a constant is created on the class, containing the enum values.
+You can remove the constant by passing a falsy value (i.e: `nil`, `false`) or rename it by passing a symbol or a string with a different name.
+
+```ruby
+class Event < ActiveRecord::Base
+    enum :status, [:available, :canceled, :completed]
+    enum :without_const, [:foo, :bar], :constant => false
+    enum :custom_name, [:a, :b, :c], :constant => :special_name
+end
+
+event::STATUSES             # returns [:available, :canceled, :completed]
+event::WITHOUT_CONST        # raises NameError
+event::SPECIAL_NAME         # returns [:a, :b, :c]. Note the name was not pluralized.
+event::CUSTOM_NAME          # raises NameError
+```
 
 ## Callbacks
 Another cool feature of enumify is the option to add a callback function that will be called each time the value of the field changes

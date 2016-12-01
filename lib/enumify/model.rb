@@ -81,7 +81,6 @@ module Enumify
           end
         end
       end
-      alias_method :enum, :enumify
     end
 
   end

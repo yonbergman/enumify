@@ -17,4 +17,3 @@ def set_database
 end
 
 set_database
-

@@ -8,6 +8,7 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'terminal-notifier-guard'
+  gem 'bump'
 end
 
 # Specify your gem's dependencies in enumify.gemspec

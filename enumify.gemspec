@@ -5,8 +5,8 @@ require "enumify/version"
 Gem::Specification.new do |s|
   s.name        = "enumify"
   s.version     = Enumify::VERSION
-  s.authors     = ["yon"]
-  s.email       = ["yonatanbergman@gmail.com"]
+  s.authors     = ["yonbergman"]
+  s.email       = ["yonbergman@gmail.com"]
   s.homepage    = "http://github.com/yonbergman/enumify"
   s.summary     = %q{enumify adds an enum command to all ActiveRecord models which enables you to work with string attributes as if they were enums}
   s.description =  <<-END

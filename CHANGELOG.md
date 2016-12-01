@@ -1,3 +1,7 @@
+## v1.0.0
+* Removed the option of using `enum` as the method. You can only
+define enums as `enumify`
+
 ## v0.0.7
 * Fixed an issue with setting an enum as a nil value
 

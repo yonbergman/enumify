@@ -3,7 +3,7 @@ require 'spec_helper'
 class Model < ActiveRecord::Base
   include Enumify::Model
 
-  enum :status, [:available, :canceled, :completed]
+  enumify :status, [:available, :canceled, :completed]
 end
 
 class OtherModel < ActiveRecord::Base
@@ -11,13 +11,13 @@ class OtherModel < ActiveRecord::Base
 
   belongs_to :model
 
-  enum :status, [:active, :expired, :not_expired]
+  enumify :status, [:active, :expired, :not_expired]
 end
 
 class ModelAllowingNil < ActiveRecord::Base
   include Enumify::Model
   self.table_name = 'models'
-  enum :status, [:available, :canceled, :completed], :allow_nil => true
+  enumify :status, [:available, :canceled, :completed], :allow_nil => true
 end
 
 
@@ -201,19 +201,19 @@ describe :Enumify do
     class ModelWithoutConst < ActiveRecord::Base
       include Enumify::Model
       self.table_name = 'models'
-      enum :status, [:available, :canceled, :completed], :constant => false
+      enumify :status, [:available, :canceled, :completed], :constant => false
     end
 
     class ModelWithSymbolNamedConst < ActiveRecord::Base
       include Enumify::Model
       self.table_name = 'models'
-      enum :status, [:available, :canceled, :completed], :constant => :special_status
+      enumify :status, [:available, :canceled, :completed], :constant => :special_status
     end
 
     class ModelWithStringNamedConst < ActiveRecord::Base
       include Enumify::Model
       self.table_name = 'models'
-      enum :status, [:available, :canceled, :completed], :constant => 'special_status'
+      enumify :status, [:available, :canceled, :completed], :constant => 'special_status'
     end
 
     it 'class should have a CONST that holds all the available options of the enum by default' do
@@ -240,7 +240,7 @@ describe :Enumify do
           Class.new(ActiveRecord::Base) {
             include Enumify::Model
             self.table_name = 'models'
-            enum :status, [:available, :canceled, :completed], :constant => invalid_name
+            enumify :status, [:available, :canceled, :completed], :constant => invalid_name
           }
         }.to raise_error(NameError)
       end
@@ -255,7 +255,7 @@ describe :Enumify do
       class ModelWithPrefix < ActiveRecord::Base
         include Enumify::Model
         self.table_name = 'models'
-        enum :status, [:available, :canceled, :completed], :prefix => 'foo'
+        enumify :status, [:available, :canceled, :completed], :prefix => 'foo'
       end
 
       subject { ModelWithPrefix.new(:status => :available) }
@@ -289,7 +289,7 @@ describe :Enumify do
       class ModelWithPrefixTrue < ActiveRecord::Base
         include Enumify::Model
         self.table_name = 'models'
-        enum :status, [:available, :canceled, :completed], :prefix => true
+        enumify :status, [:available, :canceled, :completed], :prefix => true
       end
 
       subject { ModelWithPrefixTrue.new(:status => :available) }
